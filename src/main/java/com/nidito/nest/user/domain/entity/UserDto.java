@@ -1,11 +1,13 @@
-package com.nidito.nest.user.domain;
+package com.nidito.nest.user.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.nidito.nest.shared.Views;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserDto {
 
     @JsonView(Views.Retrieve.class)

@@ -1,11 +1,14 @@
-package com.nidito.nest.user.domain;
-
+package com.nidito.nest.user.domain.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Document
+@NoArgsConstructor
 public class User {
     
     @Id
@@ -16,11 +19,10 @@ public class User {
     private String username;
     private String password;
 
-
     public User(UserDto userDto) {
 
         this.id = userDto.getId();
-        this.name = userDto.getLastname();
+        this.name = userDto.getName();
         this.lastname = userDto.getLastname();
         this.mail = userDto.getMail();
         this.username = userDto.getUsername();
