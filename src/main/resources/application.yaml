@@ -1,5 +1,9 @@
 spring:
-  data:
-    mongodb:
-      port: '27017'
-      host: localhost
+  datasource:
+    url: jdbc:postgresql://localhost:5432/database
+    username: admin
+    password: adminpassword
+  jpa:
+    hibernate:
+      ddl-auto: update
+
