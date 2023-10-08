@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class UserDto {
 
     @JsonView(Views.Retrieve.class)
-    private int id; 
+    private long id; 
     
     @JsonView({Views.Retrieve.class, Views.Create.class})
     private String name;
