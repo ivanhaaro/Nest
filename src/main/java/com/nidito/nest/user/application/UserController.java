@@ -1,6 +1,7 @@
 package com.nidito.nest.user.application;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,17 @@ import com.nidito.nest.user.domain.UserService;
 import com.nidito.nest.user.domain.entity.User;
 import com.nidito.nest.user.domain.entity.UserDto;
 
-import jakarta.persistence.EntityNotFoundException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/users")
+@Tag(name = "User entity")
 public class UserController {
     
     @Autowired
     private UserService service;
 
-    @GetMapping()
+    @GetMapping
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<List<UserDto>> getUsers() {
 
@@ -43,13 +45,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
 
         UserDto res = new UserDto(service.getUserById(id));
 
         return new ResponseEntity<UserDto>(res, HttpStatus.OK);
     }
-
 
     @PostMapping
     @JsonView(Views.Retrieve.class)
@@ -59,26 +60,19 @@ public class UserController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<UserDto> updateUser(@RequestBody @JsonView(Views.Update.class) @PathVariable long id, UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable UUID id, @RequestBody @JsonView(Views.Create.class) UserDto userDto) {
 
         UserDto res = new UserDto(service.updateUser(id, new User(userDto)));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Boolean> deleteUser(long id)
-    {
-        try
-        {
-            service.deleteUser(id);
-            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-        }
-        catch(EntityNotFoundException e)
-        {
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable UUID id) {
+
+        service.deleteUser(id);
+        return new ResponseEntity<Boolean>(true, HttpStatus.NO_CONTENT);
     }
 
 

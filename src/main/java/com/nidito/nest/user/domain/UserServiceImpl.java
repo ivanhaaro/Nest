@@ -2,6 +2,7 @@ package com.nidito.nest.user.domain;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,36 +19,30 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     public List<User> getUsers() {
+
         return userRepository.findAll();
     }
 
-    public User getUserById(long id)
+    public User getUserById(UUID id)
     {
         Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()) return user.get();
-        else throw new EntityNotFoundException("No existe un usuario con id " + id); 
+        if(user.isEmpty()) throw new EntityNotFoundException("User not found with id " + id); 
+        else return user.get();
     }
 
     public User createUser(User user){
+
         return userRepository.save(user);
     }
 
-    public User updateUser(long id, User user) {
-        if(userRepository.countByUsernameAndDifferentId(user.getUsername(), id) != 0)
-            throw new EntityNotFoundException("Username already exists"); // TODO EXCEPTION MANAGEMENT
-        return userRepository.findById(id)
-            .map(existingUser -> {
-                existingUser.setName(user.getName());
-                existingUser.setLastname(user.getLastname());
-                existingUser.setMail(user.getMail());
-                existingUser.setUsername(user.getUsername());
-                existingUser.setPassword(user.getPassword());
-                return userRepository.save(existingUser);
-            })
-            .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
+    public User updateUser(UUID id, User user) {
+        
+        if(!userRepository.existsById(id)) throw new EntityNotFoundException("User not found with id " + id); 
+        user.setId(id);
+        return userRepository.save(user);
     }
 
-    public void deleteUser(long id)
+    public void deleteUser(UUID id)
     {
         if(!userRepository.existsById(id)) throw new EntityNotFoundException("User not found with id " + id);
         userRepository.deleteById(id);

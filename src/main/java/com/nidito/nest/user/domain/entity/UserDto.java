@@ -1,5 +1,7 @@
 package com.nidito.nest.user.domain.entity;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonView;
 import com.nidito.nest.shared.Views;
 
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserDto {
 
     @JsonView(Views.Retrieve.class)
-    private long id; 
+    private UUID id; 
     
     @JsonView({Views.Retrieve.class, Views.Create.class})
     private String name;
