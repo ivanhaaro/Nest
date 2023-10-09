@@ -64,7 +64,7 @@ public class UserController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<UserDto> updateUser(@PathVariable UUID id, @RequestBody @JsonView(Views.Create.class) UserDto userDto) {
 
-        UserDto res = new UserDto(service.updateUser(id, new User(userDto)));
+        UserDto res = new UserDto(service.updateUser(new User(userDto), id));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

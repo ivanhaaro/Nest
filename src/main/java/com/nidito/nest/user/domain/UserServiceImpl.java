@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(UUID id, User user) {
+    public User updateUser(User user, UUID id) {
         
         if(!userRepository.existsById(id)) throw new EntityNotFoundException("User not found with id " + id); 
         user.setId(id);
