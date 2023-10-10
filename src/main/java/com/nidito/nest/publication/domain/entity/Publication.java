@@ -3,6 +3,7 @@ package com.nidito.nest.publication.domain.entity;
 import java.util.Date;
 import java.util.UUID;
 
+import com.nidito.nest.publication.domain.entity.dto.PublicationDto;
 import com.nidito.nest.user.domain.entity.User;
 
 import jakarta.persistence.Entity;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "publication_table")
-public class Publication {
+public abstract class Publication {
     
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,10 +27,18 @@ public class Publication {
     @ManyToOne(optional = false)
     private User owner;
     private Date date;
+    private PublicationType publiType;
+
+    public enum PublicationType {
+        Note, Picture, Song
+    }
 
     public Publication(PublicationDto publicationDto) {
 
         this.id = publicationDto.getId();
+        this.publiType = publicationDto.getPubliType();
     }
+
+    public abstract PublicationDto toDto();
 
 }

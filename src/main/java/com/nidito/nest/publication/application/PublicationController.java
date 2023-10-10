@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.nidito.nest.publication.domain.PublicationService;
 import com.nidito.nest.publication.domain.entity.Publication;
-import com.nidito.nest.publication.domain.entity.PublicationDto;
+import com.nidito.nest.publication.domain.entity.dto.PublicationDto;
 import com.nidito.nest.shared.Views;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,7 +38,7 @@ public class PublicationController {
 
         List<PublicationDto> res = publicationService.getPublications()
                                                         .stream()
-                                                        .map(PublicationDto::new)
+                                                        .map(Publication::toDto)
                                                         .collect(Collectors.toList());
         return new ResponseEntity<>(res, HttpStatus.OK);
     } 
@@ -47,7 +47,7 @@ public class PublicationController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<PublicationDto> getPublicationById(@PathVariable UUID id) {
 
-        PublicationDto res = new PublicationDto(publicationService.getPublicationById(id));
+        PublicationDto res = publicationService.getPublicationById(id).toDto();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -55,16 +55,16 @@ public class PublicationController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<PublicationDto> createPublication(@RequestBody @JsonView(Views.Create.class) PublicationDto publicationDto) {
 
-        Publication res = publicationService.createPublication(new Publication(publicationDto),publicationDto.getOwnerId());
-        return new ResponseEntity<>(new PublicationDto(res), HttpStatus.OK);
+        Publication res = publicationService.createPublication(publicationDto.toEntity(),publicationDto.getOwnerId());
+        return new ResponseEntity<>(res.toDto(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<PublicationDto> updatePublication(@RequestBody @JsonView(Views.Create.class) PublicationDto publicationDto, @PathVariable UUID id) {
 
-        Publication res = publicationService.updatePublication(new Publication(publicationDto), id);
-        return new ResponseEntity<>(new PublicationDto(res), HttpStatus.OK);
+        Publication res = publicationService.updatePublication(publicationDto.toEntity(), id);
+        return new ResponseEntity<>(res.toDto(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
