@@ -5,6 +5,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,12 +36,10 @@ public class PublicationController {
 
     @GetMapping
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<List<PublicationDto>> getPublications() {
+    public ResponseEntity<Page<PublicationDto>> getPublications(Pageable pageable) {
 
-        List<PublicationDto> res = publicationService.getPublications()
-                                                        .stream()
-                                                        .map(Publication::toDto)
-                                                        .collect(Collectors.toList());
+        Page<PublicationDto> res = publicationService.getPublications(pageable)
+                                                        .map(Publication::toDto);
         return new ResponseEntity<>(res, HttpStatus.OK);
     } 
 

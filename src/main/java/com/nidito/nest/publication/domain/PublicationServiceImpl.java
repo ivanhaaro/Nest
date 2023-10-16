@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.nidito.nest.publication.domain.entity.Publication;
@@ -24,9 +26,9 @@ public class PublicationServiceImpl implements PublicationService {
     @Autowired
     private PublicationRepository repository;
 
-    public List<Publication> getPublications() {
+    public Page<Publication> getPublications(Pageable pageable) {
         
-        return repository.findAll();
+        return repository.findAll(pageable);
     }
 
     public Publication getPublicationById(UUID id) {
