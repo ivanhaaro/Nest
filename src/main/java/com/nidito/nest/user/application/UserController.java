@@ -72,7 +72,7 @@ public class UserController {
     public ResponseEntity<Boolean> deleteUser(@PathVariable UUID id) {
 
         service.deleteUser(id);
-        return new ResponseEntity<Boolean>(true, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
 
