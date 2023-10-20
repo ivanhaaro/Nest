@@ -84,7 +84,7 @@ public class PublicationController {
     public ResponseEntity<Boolean> deletePublication(@PathVariable UUID id) {
 
         publicationService.deletePublication(id);
-        return new ResponseEntity<Boolean>(true, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
 }
