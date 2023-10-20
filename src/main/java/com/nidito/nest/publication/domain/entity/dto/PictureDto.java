@@ -1,6 +1,6 @@
 package com.nidito.nest.publication.domain.entity.dto;
+
 import com.fasterxml.jackson.annotation.JsonView;
-import com.nidito.nest.publication.domain.entity.Note;
 import com.nidito.nest.publication.domain.entity.Picture;
 import com.nidito.nest.shared.Views;
 
@@ -13,11 +13,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class PictureDto extends PublicationDto {
 
-
-    @JsonView({Views.Retrieve.class, Views.Create.class})
+    @JsonView({ Views.Retrieve.class, Views.Create.class })
     private String description;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class})
+    @JsonView({ Views.Retrieve.class, Views.Create.class })
     private String url;
 
     public PictureDto(Picture picture) {
@@ -32,4 +31,3 @@ public class PictureDto extends PublicationDto {
         return new Picture(this);
     }
 }
-

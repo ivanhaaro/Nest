@@ -1,6 +1,5 @@
 package com.nidito.nest.publication.domain;
 
-import java.util.List;
 import java.util.UUID;
 
 import com.nidito.nest.publication.domain.entity.Publication;

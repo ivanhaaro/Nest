@@ -1,11 +1,13 @@
 package com.nidito.nest.publication.application;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -36,11 +39,21 @@ public class PublicationController {
 
     @GetMapping
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<Page<PublicationDto>> getPublications(Pageable pageable) {
+    public ResponseEntity<Map<String, Object>> getPublications(@RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "5") int size) {
 
-        Page<PublicationDto> res = publicationService.getPublications(pageable)
-                                                        .map(Publication::toDto);
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        List<PublicationDto> publications;
+        Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(pageNum, size);
+        Page<Publication> page = publicationService.getPublications(pageable);
+        
+        publications = page.getContent().stream().map(Publication::toDto).toList();
+
+        response.put("publications", publications);
+        response.put("currentPage", page.getNumber());
+        response.put("totalItems", page.getTotalElements());
+        response.put("totalPages", page.getTotalPages());        
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     } 
 
     @GetMapping("/{id}")

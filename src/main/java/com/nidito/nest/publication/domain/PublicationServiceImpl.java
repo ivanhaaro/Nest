@@ -2,7 +2,6 @@ package com.nidito.nest.publication.domain;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

@@ -1,5 +1,4 @@
 package com.nidito.nest.publication.domain.entity;
-import com.nidito.nest.publication.domain.entity.dto.NoteDto;
 
 import com.nidito.nest.publication.domain.entity.dto.PictureDto;
 import jakarta.persistence.Entity;

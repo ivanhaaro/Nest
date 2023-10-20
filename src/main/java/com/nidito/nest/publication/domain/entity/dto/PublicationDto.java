@@ -18,9 +18,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.EXISTING_PROPERTY, property = "publiType", visible = true)
-@JsonSubTypes(
-    @Type(value = NoteDto.class, name = "Note")
-)
+@JsonSubTypes({
+    @Type(value = NoteDto.class, name = "Note"),
+    @Type(value = PictureDto.class, name = "Picture") 
+})
 public abstract class PublicationDto {
     
     @JsonView(Views.Retrieve.class)
