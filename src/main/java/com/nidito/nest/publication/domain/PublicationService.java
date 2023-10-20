@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import com.nidito.nest.publication.domain.entity.Publication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PublicationService {
-    List<Publication> getPublications();
+    Page<Publication> getPublications(Pageable pageable);
     Publication getPublicationById(UUID id);
     Publication createPublication(Publication publication, UUID ownerId);
     Publication updatePublication(Publication publication, UUID id);
