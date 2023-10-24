@@ -10,5 +10,6 @@ public interface UserService {
     User createUser(User user);
     User getUserById(UUID id);
     User updateUser(User user, UUID id);
+    User addFriend(UUID userId, UUID friendId);
     void deleteUser(UUID id);
 }

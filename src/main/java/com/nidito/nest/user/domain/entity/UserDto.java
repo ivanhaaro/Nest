@@ -1,5 +1,7 @@
 package com.nidito.nest.user.domain.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -15,20 +17,23 @@ public class UserDto {
     @JsonView(Views.Retrieve.class)
     private UUID id; 
     
-    @JsonView({Views.Retrieve.class, Views.Create.class})
+    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
     private String name;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class})
+    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
     private String lastname;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class})
+    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
     private String mail;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class})
+    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
     private String username;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class})
+    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
     private String password;
+
+    @JsonView({Views.Retrieve.class})
+    private List<UUID> friendsIds = new ArrayList<>();
 
     public UserDto(User user) {
 
@@ -38,5 +43,6 @@ public class UserDto {
         this.mail = user.getMail();
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.friendsIds = user.getFriends().stream().map(User::getId).toList();
     }
 }

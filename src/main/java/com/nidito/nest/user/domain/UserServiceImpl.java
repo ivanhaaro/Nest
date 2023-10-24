@@ -32,20 +32,35 @@ public class UserServiceImpl implements UserService {
 
     public User createUser(User user){
 
+        
         return userRepository.save(user);
     }
 
     public User updateUser(User user, UUID id) {
         
-        if(!userRepository.existsById(id)) throw new EntityNotFoundException("User not found with id " + id); 
+        if(!isValidUser(id)) throw new EntityNotFoundException("User not found with id " + id); 
         user.setId(id);
         return userRepository.save(user);
+    }
+
+    public User addFriend(UUID userId, UUID friendId) {
+        
+        User user = this.getUserById(userId);
+        user.getFriends().add(this.getUserById(friendId));
+        userRepository.save(user);
+        return user;
     }
 
     public void deleteUser(UUID id)
     {
         if(!userRepository.existsById(id)) throw new EntityNotFoundException("User not found with id " + id);
         userRepository.deleteById(id);
+    }
+
+    private boolean isValidUser(UUID id) {
+
+        if(id == null || id.toString().isBlank()) return false;
+        return userRepository.existsById(id);  
     }
     
 }

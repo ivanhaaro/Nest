@@ -1,11 +1,14 @@
 package com.nidito.nest.user.domain.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
@@ -25,6 +28,8 @@ public class User {
     private String mail;
     private String username;
     private String password;
+    @OneToMany
+    private List<User> friends = new ArrayList<>();
 
     public User(UserDto userDto) {
 

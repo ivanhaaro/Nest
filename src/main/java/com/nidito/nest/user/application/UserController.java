@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -57,6 +58,14 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(@RequestBody @JsonView(Views.Create.class) UserDto userDto) {
 
         UserDto res = new UserDto(service.createUser(new User(userDto)));
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/addFriend")
+    @JsonView(Views.Retrieve.class)
+    public ResponseEntity<UserDto> addFriend(@PathVariable UUID id, @RequestParam UUID friendId) {
+
+        UserDto res = new UserDto(service.addFriend(id, friendId));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
