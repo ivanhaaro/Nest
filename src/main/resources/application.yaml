@@ -6,4 +6,23 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2MB
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAS5IUISHL5MILLNRG
+      secret-key: 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
+    region:
+      static: eu-central-1
+    stack:
+      auto: false
+    s3:
+      bucket-name: nestappbucket
+
 
