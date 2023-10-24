@@ -53,7 +53,7 @@ public class UserController {
         return new ResponseEntity<UserDto>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/getFriends")
+    @GetMapping("/{id}/friends")
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<List<UserDto>> getFriendsById(@PathVariable UUID id) {
 
@@ -72,7 +72,7 @@ public class UserController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/addFriend")
+    @PostMapping("/{id}/friends")
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<UserDto> addFriend(@PathVariable UUID id, @RequestParam UUID friendId) {
 
@@ -95,7 +95,7 @@ public class UserController {
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/deleteFriend")
+    @DeleteMapping("/{id}/friends")
     public ResponseEntity<UserDto> deleteFriend(@PathVariable UUID id, @RequestParam UUID friendId) {
 
         UserDto res = new UserDto(service.deleteFriend(id, friendId));

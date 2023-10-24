@@ -10,7 +10,7 @@ public interface DiffusionListService {
     List<DiffusionList> getDiffusionLists();
     List<DiffusionList> getDiffusionListsByOwnerId(UUID ownerId);
     DiffusionList getDiffusionListById(UUID id);
-    DiffusionList createDiffusionList(DiffusionList diffusionList, UUID ownerId, List<UUID> friendsIds);
-    DiffusionList updateDiffusionList(DiffusionList diffusionList, UUID id, UUID ownerId, List<UUID> friendsIds);
+    DiffusionList createDiffusionList(DiffusionList diffusionList, UUID ownerId);
+    DiffusionList updateDiffusionList(DiffusionList diffusionList, UUID id, UUID ownerId);    
     void deleteDiffusionList(UUID id);
 }

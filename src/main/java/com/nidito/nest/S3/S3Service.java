@@ -1,4 +1,4 @@
-package com.nidito.nest.service;
+package com.nidito.nest.S3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import org.springframework.beans.factory.annotation.Autowired;

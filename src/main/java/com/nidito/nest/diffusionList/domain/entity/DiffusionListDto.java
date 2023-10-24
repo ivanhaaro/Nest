@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.nidito.nest.shared.Views;
-import com.nidito.nest.user.domain.entity.User;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +31,7 @@ public class DiffusionListDto {
         this.id = diffusionList.getId();
         this.name = diffusionList.getName();
         this.ownerId = diffusionList.getOwner().getId();
-        this.friendsIds = diffusionList.getFriends().stream().map(User::getId).toList();
+        this.friendsIds = diffusionList.getFriends().stream().toList();
     }
 }
 

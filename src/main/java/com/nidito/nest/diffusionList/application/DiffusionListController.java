@@ -63,7 +63,7 @@ public class DiffusionListController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<DiffusionListDto> createDiffusionList(@RequestBody @JsonView(Views.Create.class) DiffusionListDto diffusionListDto) {
 
-        DiffusionListDto res = new DiffusionListDto(service.createDiffusionList(new DiffusionList(diffusionListDto), diffusionListDto.getOwnerId(), diffusionListDto.getFriendsIds()));
+        DiffusionListDto res = new DiffusionListDto(service.createDiffusionList(new DiffusionList(diffusionListDto), diffusionListDto.getOwnerId()));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -71,7 +71,7 @@ public class DiffusionListController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<DiffusionListDto> createDiffusionList(@PathVariable UUID id, @RequestBody @JsonView(Views.Create.class) DiffusionListDto diffusionListDto) {
 
-        DiffusionListDto res = new DiffusionListDto(service.updateDiffusionList(new DiffusionList(diffusionListDto), id, diffusionListDto.getOwnerId(), diffusionListDto.getFriendsIds()));
+        DiffusionListDto res = new DiffusionListDto(service.updateDiffusionList(new DiffusionList(diffusionListDto), id, diffusionListDto.getOwnerId()));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

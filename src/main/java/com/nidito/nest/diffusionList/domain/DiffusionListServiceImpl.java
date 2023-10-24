@@ -41,20 +41,17 @@ public class DiffusionListServiceImpl implements DiffusionListService {
         return diffusionList.get();
     }
 
-    public DiffusionList createDiffusionList(DiffusionList diffusionList, UUID ownerId, List<UUID> friendsIds) {
+    public DiffusionList createDiffusionList(DiffusionList diffusionList, UUID ownerId) {
 
         diffusionList.setOwner(userService.getUserById(ownerId));
-        for(UUID id : friendsIds) {diffusionList.getFriends().add(userService.getUserById(id));}
-
         return repository.save(diffusionList);
     }
 
-    public DiffusionList updateDiffusionList(DiffusionList diffusionList, UUID id, UUID ownerId, List<UUID> friendsIds) {
+    public DiffusionList updateDiffusionList(DiffusionList diffusionList, UUID id, UUID ownerId) {
 
         if(!repository.existsById(id)) throw new EntityNotFoundException("Diffusion list not found with id " + id);
         diffusionList.setId(id);
         diffusionList.setOwner(userService.getUserById(ownerId));
-        for(UUID friendId : friendsIds) {diffusionList.getFriends().add(userService.getUserById(friendId));}
         return repository.save(diffusionList);
     }
 

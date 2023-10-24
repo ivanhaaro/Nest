@@ -5,20 +5,24 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import com.nidito.nest.diffusionList.domain.entity.DiffusionList;
+import com.nidito.nest.publication.domain.entity.Publication;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "user_table", uniqueConstraints={@UniqueConstraint(columnNames={"username", "mail"})})
+@Table(name = "user_table")
 @NoArgsConstructor
 public class User {
 
@@ -27,9 +31,18 @@ public class User {
     private UUID id;
     private String name;
     private String lastname;
+    @Column(unique = true)
     private String mail;
+    @Column(unique = true)
     private String username;
     private String password;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<Publication> publications = new HashSet<>();
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<DiffusionList> diffusionLists = new HashSet<>();
+
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<User> friends = new HashSet<>();
 

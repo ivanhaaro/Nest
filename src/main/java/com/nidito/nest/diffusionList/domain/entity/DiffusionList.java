@@ -11,7 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -28,14 +28,15 @@ public class DiffusionList {
     private UUID id;
     private String name;
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "diffusionlist_id")
     private User owner;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<User> friends = new HashSet<>();
+    private Set<UUID> friends = new HashSet<>();
 
     public DiffusionList(DiffusionListDto diffusionListDto) {
 
         this.id = diffusionListDto.getId();
         this.name = diffusionListDto.getName();
+        this.friends = new HashSet<>(diffusionListDto.getFriendsIds());
     }
 
     

@@ -1,4 +1,4 @@
-package com.nidito.nest.config;
+package com.nidito.nest.S3;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
