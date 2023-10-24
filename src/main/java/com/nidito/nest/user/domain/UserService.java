@@ -9,6 +9,7 @@ public interface UserService {
     List<User> getUsers();
     User createUser(User user);
     User getUserById(UUID id);
+    List<User> getFriendsById(UUID id);
     User updateUser(User user, UUID id);
     User addFriend(UUID userId, UUID friendId);
     User deleteFriend(UUID userId, UUID friendId);

@@ -1,5 +1,6 @@
 package com.nidito.nest.user.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,13 +24,19 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(UUID id)
-    {
+    public User getUserById(UUID id) {
+
         Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()) throw new EntityNotFoundException("User not found with id " + id); 
         else return user.get();
     }
 
+    public List<User> getFriendsById(UUID id) {
+
+        User user = this.getUserById(id);
+        return new ArrayList<>(user.getFriends());
+    }
+ 
     public User createUser(User user){
 
         
@@ -46,7 +53,8 @@ public class UserServiceImpl implements UserService {
     public User addFriend(UUID userId, UUID friendId) {
         
         User user = this.getUserById(userId);
-        user.getFriends().add(this.getUserById(friendId));
+        User friend = this.getUserById(friendId);
+        user.addFriend(friend);
         userRepository.save(user);
         return user;
     }
@@ -54,14 +62,22 @@ public class UserServiceImpl implements UserService {
     public User deleteFriend(UUID userId, UUID friendId) {
 
         User user = this.getUserById(userId);
-        user.getFriends().remove(this.getUserById(friendId));
+        User friend = this.getUserById(friendId);
+        user.deleteFriend(friend);
         userRepository.save(user);
         return user;
     }
 
     public void deleteUser(UUID id)
     {
-        if(!userRepository.existsById(id)) throw new EntityNotFoundException("User not found with id " + id);
+        User user = this.getUserById(id);
+
+        for (User friend : user.getFriends()) {
+            friend.getFriends().remove(user);
+        }     
+        user.getFriends().clear();
+        
+        userRepository.save(user);  
         userRepository.deleteById(id);
     }
 
