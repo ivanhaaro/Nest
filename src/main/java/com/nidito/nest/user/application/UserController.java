@@ -71,7 +71,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<UserDto> updateUser(@PathVariable UUID id, @RequestBody @JsonView(Views.Create.class) UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable UUID id, @RequestBody @JsonView(Views.Update.class) UserDto userDto) {
 
         UserDto res = new UserDto(service.updateUser(new User(userDto), id));
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -84,6 +84,10 @@ public class UserController {
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}/deleteFriend")
+    public ResponseEntity<UserDto> deleteFriend(@PathVariable UUID id, @RequestParam UUID friendId) {
 
-
+        UserDto res = new UserDto(service.deleteFriend(id, friendId));
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }

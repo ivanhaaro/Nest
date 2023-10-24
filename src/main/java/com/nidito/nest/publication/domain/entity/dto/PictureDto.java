@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class PictureDto extends PublicationDto {
 
-    @JsonView({ Views.Retrieve.class, Views.Create.class })
+    @JsonView({ Views.Retrieve.class, Views.Create.class, Views.Update.class })
     private String description;
 
     @JsonView({ Views.Retrieve.class, Views.Create.class })

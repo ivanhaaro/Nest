@@ -11,5 +11,6 @@ public interface UserService {
     User getUserById(UUID id);
     User updateUser(User user, UUID id);
     User addFriend(UUID userId, UUID friendId);
+    User deleteFriend(UUID userId, UUID friendId);
     void deleteUser(UUID id);
 }

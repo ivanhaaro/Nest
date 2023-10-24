@@ -1,8 +1,9 @@
 package com.nidito.nest.user.domain.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class User {
     private String username;
     private String password;
     @OneToMany
-    private List<User> friends = new ArrayList<>();
+    private Set<User> friends = new HashSet<>();
 
     public User(UserDto userDto) {
 

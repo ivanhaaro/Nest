@@ -33,7 +33,7 @@ public abstract class PublicationDto {
     @JsonView(Views.Retrieve.class)
     private Date date;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class})
+    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
     private PublicationType publiType;
 
     public PublicationDto(Publication publication) {

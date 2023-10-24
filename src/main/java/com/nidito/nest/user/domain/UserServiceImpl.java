@@ -51,6 +51,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    public User deleteFriend(UUID userId, UUID friendId) {
+
+        User user = this.getUserById(userId);
+        user.getFriends().remove(this.getUserById(friendId));
+        userRepository.save(user);
+        return user;
+    }
+
     public void deleteUser(UUID id)
     {
         if(!userRepository.existsById(id)) throw new EntityNotFoundException("User not found with id " + id);

@@ -74,7 +74,7 @@ public class PublicationController {
 
     @PutMapping("/{id}")
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<PublicationDto> updatePublication(@RequestBody @JsonView(Views.Create.class) PublicationDto publicationDto, @PathVariable UUID id) {
+    public ResponseEntity<PublicationDto> updatePublication(@RequestBody @JsonView(Views.Update.class) PublicationDto publicationDto, @PathVariable UUID id) {
 
         Publication res = publicationService.updatePublication(publicationDto.toEntity(), id);
         return new ResponseEntity<>(res.toDto(), HttpStatus.OK);
