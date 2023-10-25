@@ -7,6 +7,7 @@ import com.nidito.nest.shared.Views;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -19,15 +20,16 @@ public class PictureDto extends PublicationDto {
     @JsonView({ Views.Retrieve.class, Views.Create.class })
     private String url;
 
-    public PictureDto(Picture picture) {
+    @JsonView({ Views.Retrieve.class, Views.Create.class })
+    private MultipartFile image;
 
+    public PictureDto(Picture picture) {
         super(picture);
         this.description = picture.getDescription();
         this.url = picture.getUrl();
     }
 
     public Picture toEntity() {
-
         return new Picture(this);
     }
 }

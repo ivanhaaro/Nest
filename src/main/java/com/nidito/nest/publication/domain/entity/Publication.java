@@ -39,6 +39,7 @@ public abstract class Publication {
     public Publication(PublicationDto publicationDto) {
 
         this.id = publicationDto.getId();
+        this.date = publicationDto.getDate();
         this.publiType = publicationDto.getPubliType();
     }
 
