@@ -52,6 +52,13 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"))
     private Set<User> friends = new HashSet<>();
 
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+        name = "feed_table",
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "id"))
+    private Set<Publication> feed = new HashSet<>();
+
     public User(UserDto userDto) {
 
         this.id = userDto.getId();

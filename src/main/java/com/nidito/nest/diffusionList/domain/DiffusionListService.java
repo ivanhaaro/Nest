@@ -7,8 +7,7 @@ import com.nidito.nest.diffusionList.domain.entity.DiffusionList;
 
 public interface DiffusionListService {
     
-    List<DiffusionList> getDiffusionLists();
-    List<DiffusionList> getDiffusionListsByOwnerId(UUID ownerId);
+    List<DiffusionList> getDiffusionLists(UUID userId);
     DiffusionList getDiffusionListById(UUID id);
     DiffusionList createDiffusionList(DiffusionList diffusionList, UUID ownerId);
     DiffusionList updateDiffusionList(DiffusionList diffusionList, UUID id, UUID ownerId);    

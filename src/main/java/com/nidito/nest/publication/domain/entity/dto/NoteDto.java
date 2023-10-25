@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class NoteDto extends PublicationDto {
     
-    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
+    @JsonView({Views.Retrieve.class, Views.Create.class})
     private String title;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
+    @JsonView({Views.Retrieve.class, Views.Create.class})
     private String message;
 
     public NoteDto(Note note) {

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.nidito.nest.user.domain.entity.User;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,10 +26,11 @@ public class DiffusionList {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<UUID> friends = new HashSet<>();
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "diffusionlist_id")
     private User owner;
-    private Set<UUID> friends = new HashSet<>();
 
     public DiffusionList(DiffusionListDto diffusionListDto) {
 

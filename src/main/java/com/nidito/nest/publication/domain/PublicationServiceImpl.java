@@ -2,7 +2,9 @@ package com.nidito.nest.publication.domain;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.nidito.nest.publication.domain.entity.Publication;
 import com.nidito.nest.publication.infrastructure.PublicationRepository;
 import com.nidito.nest.user.domain.UserService;
+import com.nidito.nest.user.domain.entity.User;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -30,6 +33,12 @@ public class PublicationServiceImpl implements PublicationService {
         return repository.findAll(pageable);
     }
 
+    public Set<Publication> getFeed(UUID userId) {
+
+        User user = userService.getUserById(userId);
+        return user.getFeed();
+    }
+
     public Publication getPublicationById(UUID id) {
 
         Optional<Publication> publication = repository.findById(id);
@@ -37,10 +46,11 @@ public class PublicationServiceImpl implements PublicationService {
         else return publication.get();
     }
 
-    public Publication createPublication(Publication publication, UUID ownerId) {
+    public Publication createPublication(Publication publication, UUID ownerId, List<UUID> usersIds) {
 
         publication.setDate(Date.from(Instant.now()));
         publication.setOwner(userService.getUserById(ownerId));
+        for(UUID id : usersIds) { userService.getUserById(id).getFeed().add(publication); }
         return repository.save(publication);
     }
 

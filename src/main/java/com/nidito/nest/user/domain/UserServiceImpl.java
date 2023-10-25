@@ -1,8 +1,8 @@
 package com.nidito.nest.user.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +31,14 @@ public class UserServiceImpl implements UserService {
         else return user.get();
     }
 
-    public List<User> getFriendsById(UUID id) {
+    public Set<User> getFriends(UUID id) {
 
         User user = this.getUserById(id);
-        return new ArrayList<>(user.getFriends());
+        return user.getFriends();
     }
  
     public User createUser(User user){
 
-        
         return userRepository.save(user);
     }
 
@@ -68,15 +67,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public void deleteUser(UUID id)
-    {
+    public void deleteUser(UUID id) {
+
         User user = this.getUserById(id);
 
         for (User friend : user.getFriends()) {
             friend.getFriends().remove(user);
         }     
         user.getFriends().clear();
-        
         userRepository.save(user);  
         userRepository.deleteById(id);
     }

@@ -57,9 +57,9 @@ public class UserController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<List<UserDto>> getFriendsById(@PathVariable UUID id) {
 
-        List<UserDto> res = service.getFriendsById(id).stream()
-                                                        .map(UserDto::new)
-                                                        .toList();
+        List<UserDto> res = service.getFriends(id).stream()
+                                                    .map(UserDto::new)
+                                                    .toList();
 
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

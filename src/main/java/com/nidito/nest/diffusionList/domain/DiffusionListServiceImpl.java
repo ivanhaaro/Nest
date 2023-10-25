@@ -23,15 +23,14 @@ public class DiffusionListServiceImpl implements DiffusionListService {
     @Autowired
     private UserService userService;
 
-    public List<DiffusionList> getDiffusionLists() {
+    public List<DiffusionList> getDiffusionLists(UUID userId) {
         
-        return repository.findAll();
-    }
-
-    public List<DiffusionList> getDiffusionListsByOwnerId(UUID ownerId) {
-
-        User owner = userService.getUserById(ownerId);
-        return repository.findByOwner(owner);
+        if(userId == null) {
+            return repository.findAll();
+        } else {
+            User user = userService.getUserById(userId);
+            return repository.findByOwner(user);
+        }
     }
 
     public DiffusionList getDiffusionListById(UUID id) {

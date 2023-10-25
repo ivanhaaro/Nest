@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -33,9 +34,9 @@ public class DiffusionListController {
 
     @GetMapping
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<List<DiffusionListDto>> getDiffusionLists() {
+    public ResponseEntity<List<DiffusionListDto>> getDiffusionLists(@RequestParam(required = false) UUID userId) {
 
-        List<DiffusionListDto> res = service.getDiffusionLists().stream()
+        List<DiffusionListDto> res = service.getDiffusionLists(userId).stream()
                                                                 .map(DiffusionListDto::new)
                                                                 .toList();
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -46,16 +47,6 @@ public class DiffusionListController {
     public ResponseEntity<DiffusionListDto> getDiffusionListById(@PathVariable UUID id) {
 
         DiffusionListDto res = new DiffusionListDto(service.getDiffusionListById(id));
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-
-    @GetMapping("/owner/{ownerId}")
-    @JsonView(Views.Retrieve.class)
-    public ResponseEntity<List<DiffusionListDto>> getDiffusionLists(@PathVariable UUID ownerId) {
-
-        List<DiffusionListDto> res = service.getDiffusionListsByOwnerId(ownerId).stream()
-                                                                                .map(DiffusionListDto::new)
-                                                                                .toList();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

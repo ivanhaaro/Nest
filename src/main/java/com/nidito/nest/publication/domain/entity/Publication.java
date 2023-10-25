@@ -6,7 +6,6 @@ import java.util.UUID;
 import com.nidito.nest.publication.domain.entity.dto.PublicationDto;
 import com.nidito.nest.user.domain.entity.User;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +28,7 @@ public abstract class Publication {
     private Date date;
     private PublicationType publiType;
 
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(optional = false)
     @JoinColumn(name = "owner_id")
     private User owner;
 
@@ -44,5 +43,4 @@ public abstract class Publication {
     }
 
     public abstract PublicationDto toDto();
-
 }
