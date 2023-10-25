@@ -14,6 +14,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -44,6 +46,10 @@ public class User {
     private Set<DiffusionList> diffusionLists = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+        name = "friends_table",
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"))
     private Set<User> friends = new HashSet<>();
 
     public User(UserDto userDto) {
@@ -58,6 +64,7 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
+        
         if (o == null || !(o instanceof User)) return false;
         User user = (User) o;
         return Objects.equals(id, user.id);
@@ -65,6 +72,7 @@ public class User {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(id);
     }
 
