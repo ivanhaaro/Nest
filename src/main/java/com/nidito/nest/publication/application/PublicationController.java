@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.nidito.nest.publication.domain.PictureService;
+import com.nidito.nest.publication.domain.entity.dto.NoteDto;
 import com.nidito.nest.publication.domain.entity.dto.PictureDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.nidito.nest.publication.domain.PublicationService;
 import com.nidito.nest.publication.domain.entity.Publication;
+import com.nidito.nest.publication.domain.entity.Publication.PublicationType;
 import com.nidito.nest.publication.domain.entity.dto.PublicationDto;
 import com.nidito.nest.shared.Views;
 
@@ -66,10 +68,11 @@ public class PublicationController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/createNote")
+    @PostMapping("/note")
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<PublicationDto> createPublication(@RequestBody @JsonView(Views.Create.class) PublicationDto publicationDto) {
+    public ResponseEntity<PublicationDto> createNote(@RequestBody @JsonView(Views.Create.class) NoteDto publicationDto) {
 
+        publicationDto.setPubliType(PublicationType.Note);
         Publication res = publicationService.createPublication(publicationDto.toEntity(),publicationDto.getOwnerId(), publicationDto.getWatchers());
         return new ResponseEntity<>(res.toDto(), HttpStatus.OK);
     }
@@ -91,9 +94,10 @@ public class PublicationController {
 
     @PostMapping("/picture")
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<String> createPicture(@ModelAttribute PictureDto pictureDto){
-        return new ResponseEntity<>(pictureService.createPicture(pictureDto), HttpStatus.OK);
+    public ResponseEntity<String> createPicture(@RequestBody @JsonView(Views.Create.class) PictureDto pictureDto) {
 
+        pictureDto.setPubliType(PublicationType.Picture);
+        return new ResponseEntity<>(pictureService.createPicture(pictureDto), HttpStatus.OK);
     }
 
 

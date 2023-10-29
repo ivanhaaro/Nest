@@ -17,10 +17,10 @@ public class PictureDto extends PublicationDto {
     @JsonView({ Views.Retrieve.class, Views.Create.class })
     private String description;
 
-    @JsonView({ Views.Retrieve.class, Views.Create.class })
+    @JsonView(Views.Retrieve.class)
     private String url;
 
-    @JsonView({ Views.Retrieve.class, Views.Create.class })
+    @JsonView(Views.Create.class)
     private MultipartFile image;
 
     public PictureDto(Picture picture) {

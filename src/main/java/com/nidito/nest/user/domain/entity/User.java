@@ -38,6 +38,7 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
+    private boolean enableNotifications;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Set<Publication> publications = new HashSet<>();
@@ -67,6 +68,7 @@ public class User {
         this.mail = userDto.getMail();
         this.username = userDto.getUsername();
         this.password = userDto.getPassword();
+        this.enableNotifications = userDto.isEnableNotifications();
     }
 
     @Override
