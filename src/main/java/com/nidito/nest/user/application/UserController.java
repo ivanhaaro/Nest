@@ -101,4 +101,10 @@ public class UserController {
         UserDto res = new UserDto(service.deleteFriend(id, friendId));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserDto> getUserByUsername(@PathVariable String username) {
+        UserDto res = new UserDto(service.getUserByUsername(username));
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }

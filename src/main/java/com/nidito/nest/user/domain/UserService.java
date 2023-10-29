@@ -84,5 +84,10 @@ public class UserService {
         if(id == null || id.toString().isBlank()) return false;
         return userRepository.existsById(id);  
     }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
+    }
     
 }
