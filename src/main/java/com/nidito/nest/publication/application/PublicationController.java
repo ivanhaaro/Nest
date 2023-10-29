@@ -89,10 +89,10 @@ public class PublicationController {
     //     return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     // }
 
-    @PostMapping("/createPicture")
+    @PostMapping("/picture")
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<String> createPicture(@ModelAttribute PictureDto pictureDto){
-        return new ResponseEntity(pictureService.createPicture(pictureDto), HttpStatus.OK);
+        return new ResponseEntity<>(pictureService.createPicture(pictureDto), HttpStatus.OK);
 
     }
 
