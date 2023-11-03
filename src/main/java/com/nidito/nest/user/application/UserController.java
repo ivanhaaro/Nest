@@ -31,13 +31,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class UserController {
     
     @Autowired
-    private UserService service;
+    private UserService userService;
 
     @GetMapping
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<List<UserDto>> getUsers() {
 
-        List<UserDto> res = service.getUsers().stream()
+        List<UserDto> res = userService.getUsers().stream()
                                     .map(UserDto::new)
                                     .collect(Collectors.toList());
 
@@ -48,7 +48,7 @@ public class UserController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
 
-        UserDto res = new UserDto(service.getUserById(id));
+        UserDto res = new UserDto(userService.getUserById(id));
 
         return new ResponseEntity<UserDto>(res, HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class UserController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<List<UserDto>> getFriendsById(@PathVariable UUID id) {
 
-        List<UserDto> res = service.getFriends(id).stream()
+        List<UserDto> res = userService.getFriends(id).stream()
                                                     .map(UserDto::new)
                                                     .toList();
 
@@ -68,7 +68,7 @@ public class UserController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<UserDto> createUser(@RequestBody @JsonView(Views.Create.class) UserDto userDto) {
 
-        UserDto res = new UserDto(service.createUser(new User(userDto)));
+        UserDto res = new UserDto(userService.createUser(new User(userDto)));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -76,7 +76,7 @@ public class UserController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<UserDto> addFriend(@PathVariable UUID id, @RequestParam UUID friendId) {
 
-        UserDto res = new UserDto(service.addFriend(id, friendId));
+        UserDto res = new UserDto(userService.addFriend(id, friendId));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -84,27 +84,45 @@ public class UserController {
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<UserDto> updateUser(@PathVariable UUID id, @RequestBody @JsonView(Views.Update.class) UserDto userDto) {
 
-        UserDto res = new UserDto(service.updateUser(new User(userDto), id));
+        UserDto res = new UserDto(userService.updateUser(new User(userDto), id));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable UUID id) {
 
-        service.deleteUser(id);
+        userService.deleteUser(id);
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/friends")
     public ResponseEntity<UserDto> deleteFriend(@PathVariable UUID id, @RequestParam UUID friendId) {
 
-        UserDto res = new UserDto(service.deleteFriend(id, friendId));
+        UserDto res = new UserDto(userService.deleteFriend(id, friendId));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable String username) {
-        UserDto res = new UserDto(service.getUserByUsername(username));
+        UserDto res = new UserDto(userService.getUserByUsername(username));
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/sendFriendRequest")
+    @JsonView(Views.Retrieve.class)
+    public ResponseEntity<String> sendFriendRequest(@PathVariable UUID id, @RequestParam String friendUsername) {
+
+        String response = userService.sendFriendRequest(id, friendUsername);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/getFriendRequests")
+    @JsonView(Views.Retrieve.class)
+    public ResponseEntity<List<UserDto>> getFriendRequests(@PathVariable UUID id) {
+
+        List<UserDto> pendingUserRequests  = userService.getAllFriendRequests(id);
+
+        return new ResponseEntity<>(pendingUserRequests, HttpStatus.OK);
     }
 }

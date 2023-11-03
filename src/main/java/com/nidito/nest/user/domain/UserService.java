@@ -4,7 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.nidito.nest.user.domain.entity.FriendRequest;
+import com.nidito.nest.user.domain.entity.UserDto;
+import com.nidito.nest.user.infrastructure.FriendRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FriendRequestRepository friendRequestRepository;
 
     public List<User> getUsers() {
 
@@ -88,6 +95,26 @@ public class UserService {
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
             .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
+    }
+
+    public String sendFriendRequest(UUID originUser, String friendUsername){
+        User sender = userRepository.findById(originUser).orElseThrow(RuntimeException::new);
+        User receiver = userRepository.findByUsername(friendUsername).orElseThrow(RuntimeException::new);
+
+        try {
+            friendRequestRepository.save(new FriendRequest(sender, receiver));
+            return "Request sent successfully";
+        }catch (Exception ex){
+            return "Error while sending the request from" + sender + "to" + receiver;
+        }
+    }
+
+    public List<UserDto> getAllFriendRequests(UUID userId){
+        return friendRequestRepository.findByReceiverId(userId)
+                .stream()
+                .map(f -> userRepository.findById(userId))
+                .map(u -> new UserDto(u.get()))
+                .collect(Collectors.toList());
     }
     
 }
