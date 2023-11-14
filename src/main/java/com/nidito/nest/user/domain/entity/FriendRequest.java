@@ -25,6 +25,7 @@ public class FriendRequest {
     private User receiver;
 
     public FriendRequest(User origin, User receiver) {
+        
         this.origin = origin;
         this.receiver = receiver;
     }

@@ -104,6 +104,7 @@ public class UserController {
 
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable String username) {
+
         UserDto res = new UserDto(userService.getUserByUsername(username));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -113,7 +114,6 @@ public class UserController {
     public ResponseEntity<String> sendFriendRequest(@PathVariable UUID id, @RequestParam String friendUsername) {
 
         String response = userService.sendFriendRequest(id, friendUsername);
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -122,7 +122,6 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getFriendRequests(@PathVariable UUID id) {
 
         List<UserDto> pendingUserRequests  = userService.getAllFriendRequests(id);
-
         return new ResponseEntity<>(pendingUserRequests, HttpStatus.OK);
     }
 }

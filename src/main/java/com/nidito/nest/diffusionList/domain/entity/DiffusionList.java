@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.nidito.nest.user.domain.entity.User;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,8 +29,8 @@ public class DiffusionList {
     private String name;
     private Set<UUID> friends = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "diffusionlist_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
     public DiffusionList(DiffusionListDto diffusionListDto) {
