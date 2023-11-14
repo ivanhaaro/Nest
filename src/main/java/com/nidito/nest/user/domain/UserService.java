@@ -16,6 +16,7 @@ import com.nidito.nest.user.domain.entity.User;
 import com.nidito.nest.user.infrastructure.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -56,12 +57,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User addFriend(UUID userId, UUID friendId) {
         
         User user = this.getUserById(userId);
         User friend = this.getUserById(friendId);
         user.addFriend(friend);
         userRepository.save(user);
+        friendRequestRepository.deleteByOriginAndReceiver(friend, user);
         return user;
     }
 
