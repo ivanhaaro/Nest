@@ -31,12 +31,16 @@ public class LetterDto {
     @JsonView({Views.Retrieve.class, Views.Create.class})
     private UUID receiverUserId;
 
+    @JsonView({Views.Retrieve.class})
+    private boolean opened;
+
     public LetterDto(Letter letter) {
 
         this.id = letter.getId();
         this.title = letter.getTitle();
         this.text = letter.getText();
         this.date = letter.getDate();
+        this.opened = letter.isOpened();
         this.originUserId = letter.getOrigin().getId();
         this.receiverUserId = letter.getReceiver().getId();
     }

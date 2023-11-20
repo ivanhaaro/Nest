@@ -44,5 +44,12 @@ public class LetterService {
         letter.setReceiver(receiver);
         return letterRepository.save(letter);
     }
+
+    public Letter openLetter(UUID id) {
+
+        Letter letter = this.getLetterById(id);
+        letter.setOpened(true);
+        return letterRepository.save(letter);
+    }
     
 }

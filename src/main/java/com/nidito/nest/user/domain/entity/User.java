@@ -21,7 +21,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
 
 @Data
 @Entity
@@ -39,9 +38,6 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
-
-    @Nullable
-    private boolean enableNotifications;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Set<Publication> publications = new HashSet<>();
@@ -71,7 +67,6 @@ public class User {
         this.mail = userDto.getMail();
         this.username = userDto.getUsername();
         this.password = userDto.getPassword();
-        this.enableNotifications = userDto.isEnableNotifications();
     }
 
     @Override

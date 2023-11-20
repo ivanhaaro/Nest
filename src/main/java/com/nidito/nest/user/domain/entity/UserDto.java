@@ -30,9 +30,6 @@ public class UserDto {
     @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
     private String password;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
-    private boolean enableNotifications;
-
     public UserDto(User user) {
 
         this.id = user.getId();
@@ -41,6 +38,5 @@ public class UserDto {
         this.mail = user.getMail();
         this.username = user.getUsername();
         this.password = user.getPassword();
-        this.enableNotifications = user.isEnableNotifications();
     }
 }

@@ -109,19 +109,19 @@ public class UserController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/sendFriendRequest")
+    @PostMapping("/{id}/friends/request")
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<String> sendFriendRequest(@PathVariable UUID id, @RequestParam String friendUsername) {
+    public ResponseEntity<String> sendFriendRequest(@PathVariable UUID id, @RequestParam UUID friendUsername) {
 
         String response = userService.sendFriendRequest(id, friendUsername);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/getFriendRequests")
+    @GetMapping("/{id}/friends/requests")
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<List<UserDto>> getFriendRequests(@PathVariable UUID id) {
 
-        List<UserDto> pendingUserRequests  = userService.getAllFriendRequests(id);
+        List<UserDto> pendingUserRequests = userService.getAllFriendRequests(id);
         return new ResponseEntity<>(pendingUserRequests, HttpStatus.OK);
     }
 }

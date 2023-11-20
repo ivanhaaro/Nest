@@ -45,7 +45,7 @@ public class UserService {
         return user.getFriends();
     }
  
-    public User createUser(User user){
+    public User createUser(User user) {
 
         return userRepository.save(user);
     }
@@ -100,9 +100,10 @@ public class UserService {
             .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
     }
 
-    public String sendFriendRequest(UUID originUser, String friendUsername){
+    public String sendFriendRequest(UUID originUser, UUID friendUsername) {
+
         User sender = userRepository.findById(originUser).orElseThrow(RuntimeException::new);
-        User receiver = userRepository.findByUsername(friendUsername).orElseThrow(RuntimeException::new);
+        User receiver = userRepository.findById(friendUsername).orElseThrow(RuntimeException::new);
 
         try {
             friendRequestRepository.save(new FriendRequest(sender, receiver));
@@ -112,10 +113,11 @@ public class UserService {
         }
     }
 
-    public List<UserDto> getAllFriendRequests(UUID userId){
+    public List<UserDto> getAllFriendRequests(UUID userId) {
+
         return friendRequestRepository.findByReceiverId(userId)
                 .stream()
-                .map(f -> userRepository.findById(userId))
+                .map(f -> userRepository.findById(f.getOrigin().getId()))
                 .map(u -> new UserDto(u.get()))
                 .collect(Collectors.toList());
     }

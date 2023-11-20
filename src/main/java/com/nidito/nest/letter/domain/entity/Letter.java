@@ -27,6 +27,7 @@ public class Letter {
     private String title;
     private String text;
     private Date date;    
+    private boolean opened;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "origin_user_id")
@@ -42,6 +43,7 @@ public class Letter {
         this.title = letterDto.getTitle();
         this.text = letterDto.getText();
         this.date = letterDto.getDate();
+        this.opened = false;
     }
 
 }
