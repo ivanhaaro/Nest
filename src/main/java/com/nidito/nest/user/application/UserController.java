@@ -111,9 +111,9 @@ public class UserController {
 
     @PostMapping("/{id}/friends/request")
     @JsonView(Views.Retrieve.class)
-    public ResponseEntity<String> sendFriendRequest(@PathVariable UUID id, @RequestParam UUID friendUsername) {
+    public ResponseEntity<String> sendFriendRequest(@PathVariable UUID id, @RequestParam UUID friendId) {
 
-        String response = userService.sendFriendRequest(id, friendUsername);
+        String response = userService.sendFriendRequest(id, friendId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

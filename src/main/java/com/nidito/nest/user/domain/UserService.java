@@ -100,10 +100,10 @@ public class UserService {
             .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
     }
 
-    public String sendFriendRequest(UUID originUser, UUID friendUsername) {
+    public String sendFriendRequest(UUID originUser, UUID friendId) {
 
         User sender = userRepository.findById(originUser).orElseThrow(RuntimeException::new);
-        User receiver = userRepository.findById(friendUsername).orElseThrow(RuntimeException::new);
+        User receiver = userRepository.findById(friendId).orElseThrow(RuntimeException::new);
 
         try {
             friendRequestRepository.save(new FriendRequest(sender, receiver));
