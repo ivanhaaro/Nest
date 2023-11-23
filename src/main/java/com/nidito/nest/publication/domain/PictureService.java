@@ -31,6 +31,9 @@ public class PictureService {
         String fileName = file.getOriginalFilename() + "_" + ZonedDateTime.now();
         s3Client.putObject(bucketName, fileName, convertMultipartFileToFile(file));
 
+        File tempFile = new File(file.getOriginalFilename());
+        if(tempFile.exists()) tempFile.delete();
+        
         String fileUrl = s3Client.getUrl(bucketName, fileName).toString();
         Picture picture = new Picture(pictureDto);
         picture.setUrl(fileUrl);
