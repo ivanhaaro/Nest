@@ -117,6 +117,14 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}/friends/request")
+    @JsonView(Views.Retrieve.class)
+    public ResponseEntity<String> deleteFriendRequest(@PathVariable UUID id, @RequestParam UUID friendId) {
+
+        String response = userService.deleteFriendRequest(id, friendId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}/friends/requests")
     @JsonView(Views.Retrieve.class)
     public ResponseEntity<List<UserDto>> getFriendRequests(@PathVariable UUID id) {
