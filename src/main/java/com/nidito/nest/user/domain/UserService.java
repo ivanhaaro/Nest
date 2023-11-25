@@ -121,5 +121,13 @@ public class UserService {
                 .map(u -> new UserDto(u.get()))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public String deleteFriendRequest(UUID userId, UUID friendId){
+        User user = this.getUserById(userId);
+        User friend = this.getUserById(friendId);
+        friendRequestRepository.deleteByOriginAndReceiver(friend, user);
+        return "Friend request successfully removed!";
+    }
     
 }
