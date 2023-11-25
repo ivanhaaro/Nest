@@ -51,13 +51,10 @@ public class PublicationService {
         publication.setDate(Date.from(Instant.now()));
         publication.setOwner(userService.getUserById(ownerId));
         for(UUID id : usersIds) {
-            User u = userService.getUserById(id);
-            Set<Publication> feed = u.getFeed();
-            feed.add(publication); 
-            // userService
-            // .getUserById(id)
-            // .getFeed()
-            // .add(publication); 
+            userService
+            .getUserById(id)
+            .getFeed()
+            .add(publication); 
         }
         return repository.save(publication);
     }
