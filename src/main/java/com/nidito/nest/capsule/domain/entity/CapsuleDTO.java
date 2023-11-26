@@ -25,7 +25,7 @@ public class CapsuleDto {
     private String description;
 
     // @JsonView({Views.Retrieve.class, Views.Create.class})
-    // private String imageURL;
+    // private String imageURL;xd
 
     @JsonView({Views.Retrieve.class, Views.Create.class})
     private Date openDate;
