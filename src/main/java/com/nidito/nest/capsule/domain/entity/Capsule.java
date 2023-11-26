@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "capsule_table")
-public abstract class Capsule {
+public class Capsule {
     
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -33,7 +33,7 @@ public abstract class Capsule {
     private String title;
     private String description;
     private Date openDate;
-    private String imageURL;
+    // private String imageURL;
     @ManyToMany(mappedBy = "capsules")
     private Set<User> members = new HashSet<>(); 
     @OneToMany
@@ -46,9 +46,12 @@ public abstract class Capsule {
         this.openDate = capsuleDTO.getOpenDate();
         this.title = capsuleDTO.getTitle();
         this.description = capsuleDTO.getDescription();
-        this.imageURL = capsuleDTO.getImageURL();
+        // this.imageURL = capsuleDTO.getImageURL();
         this.members = capsuleDTO.getMembers();
     }
 
-    public abstract CapsuleDTO toDto();
+    public CapsuleDTO toDto()
+    {
+        return new CapsuleDTO(this);
+    }
 }

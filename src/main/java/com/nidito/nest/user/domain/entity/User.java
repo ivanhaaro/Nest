@@ -60,7 +60,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "id"))
     private Set<Publication> feed = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
         name = "user_capsule",
         joinColumns = @JoinColumn(name = "user_id"),

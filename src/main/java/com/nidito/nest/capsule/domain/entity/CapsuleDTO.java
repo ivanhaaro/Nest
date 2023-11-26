@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public abstract class CapsuleDTO {
-    
+public class CapsuleDTO {
+
     @JsonView(Views.Retrieve.class)
     private UUID id;
 
@@ -24,8 +24,8 @@ public abstract class CapsuleDTO {
     @JsonView({Views.Retrieve.class, Views.Create.class})
     private String description;
 
-    @JsonView({Views.Retrieve.class, Views.Create.class})
-    private String imageURL;
+    // @JsonView({Views.Retrieve.class, Views.Create.class})
+    // private String imageURL;
 
     @JsonView({Views.Retrieve.class, Views.Create.class})
     private Date openDate;
@@ -39,10 +39,13 @@ public abstract class CapsuleDTO {
         this.title = capsule.getTitle();
         this.description = capsule.getDescription();
         this.openDate = capsule.getOpenDate();
-        this.imageURL = capsule.getImageURL();
+        // this.imageURL = capsule.getImageURL();
         this.members = capsule.getMembers();
     }
 
-    public abstract Capsule toEntity();
+    public Capsule toEntity()
+    {
+        return new Capsule(this);
+    }
 
 }
