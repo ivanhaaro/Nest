@@ -1,14 +1,12 @@
-package com.nidito.nest.publication.domain.entity.dto;
+package com.nidito.nest.capsule.domain.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.nidito.nest.publication.domain.entity.Publication;
-import com.nidito.nest.publication.domain.entity.Publication.PublicationType;
 import com.nidito.nest.shared.Views;
+import com.nidito.nest.user.domain.entity.User;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,15 +30,19 @@ public abstract class CapsuleDTO {
     @JsonView({Views.Retrieve.class, Views.Create.class})
     private Date openDate;
 
+    @JsonView({Views.Retrieve.class, Views.Create.class})
+    private Set<User> members;
 
-    public PublicationDto(Publication publication) {
+    public CapsuleDTO(Capsule capsule) {
 
-        this.id = publication.getId();
-        this.ownerId = publication.getOwner().getId();
-        this.date = publication.getDate();
-        this.publiType = publication.getPubliType();
+        this.id = capsule.getId();
+        this.title = capsule.getTitle();
+        this.description = capsule.getDescription();
+        this.openDate = capsule.getOpenDate();
+        this.imageURL = capsule.getImageURL();
+        this.members = capsule.getMembers();
     }
 
-    public abstract Publication toEntity();
+    public abstract Capsule toEntity();
 
 }

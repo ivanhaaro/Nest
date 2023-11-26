@@ -15,8 +15,7 @@ import com.nidito.nest.user.domain.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -25,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "publication_table")
+@Table(name = "capsule_table")
 public abstract class Capsule {
     
     @Id
@@ -35,17 +34,21 @@ public abstract class Capsule {
     private String description;
     private Date openDate;
     private String imageURL;
-    private Set<UUID> members = new HashSet<>(); 
-    @OneToMany(mappedBy = "capsule")
+    @ManyToMany(mappedBy = "capsules")
+    private Set<User> members = new HashSet<>(); 
+    @OneToMany
     private List<Publication> publications;
 
 
     public Capsule(CapsuleDTO capsuleDTO) {
 
         this.id = capsuleDTO.getId();
-        this.openDate = capsuleDTO.getDate();
-        this.title = capsuleDTO.get
+        this.openDate = capsuleDTO.getOpenDate();
+        this.title = capsuleDTO.getTitle();
+        this.description = capsuleDTO.getDescription();
+        this.imageURL = capsuleDTO.getImageURL();
+        this.members = capsuleDTO.getMembers();
     }
 
-    public abstract PublicationDto toDto();
+    public abstract CapsuleDTO toDto();
 }
