@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.nidito.nest.capsule.domain.entity.Capsule;
 import com.nidito.nest.publication.domain.entity.Publication;
 import com.nidito.nest.publication.infrastructure.PublicationRepository;
 import com.nidito.nest.user.domain.UserService;
@@ -44,6 +45,11 @@ public class PublicationService {
         Optional<Publication> publication = repository.findById(id);
         if(publication.isEmpty()) throw new EntityNotFoundException("Publication with ID: " + id + " not found");
         else return publication.get();
+    }
+
+    public List<Publication> getPublicationByCapsule(Capsule capsule) {
+
+       return repository.findByCapsule(capsule);
     }
 
     public Publication createPublication(Publication publication, UUID ownerId, List<UUID> usersIds) {

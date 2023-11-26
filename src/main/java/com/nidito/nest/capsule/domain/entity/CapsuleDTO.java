@@ -1,19 +1,19 @@
 package com.nidito.nest.capsule.domain.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.nidito.nest.shared.Views;
-import com.nidito.nest.user.domain.entity.User;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CapsuleDTO {
+public class CapsuleDto {
 
     @JsonView(Views.Retrieve.class)
     private UUID id;
@@ -31,21 +31,15 @@ public class CapsuleDTO {
     private Date openDate;
 
     @JsonView({Views.Retrieve.class, Views.Create.class})
-    private Set<User> members;
+    private List<UUID> members = new ArrayList<>();
 
-    public CapsuleDTO(Capsule capsule) {
+    public CapsuleDto(Capsule capsule) {
 
         this.id = capsule.getId();
         this.title = capsule.getTitle();
         this.description = capsule.getDescription();
         this.openDate = capsule.getOpenDate();
         // this.imageURL = capsule.getImageURL();
-        this.members = capsule.getMembers();
+        this.members = capsule.getMembers().stream().map(c -> c.getId()).toList();
     }
-
-    public Capsule toEntity()
-    {
-        return new Capsule(this);
-    }
-
 }

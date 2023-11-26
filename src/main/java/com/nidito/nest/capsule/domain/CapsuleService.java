@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.nidito.nest.capsule.domain.entity.Capsule;
 import com.nidito.nest.capsule.infrastructure.CapsuleRepository;
+import com.nidito.nest.publication.domain.PublicationService;
 import com.nidito.nest.publication.domain.entity.Publication;
 import com.nidito.nest.user.domain.UserService;
 import com.nidito.nest.user.domain.entity.User;
@@ -26,6 +27,9 @@ public class CapsuleService {
     
     @Autowired
     private CapsuleRepository repository;
+
+    @Autowired
+    private PublicationService publicationService;
 
     public Page<Capsule> getCapsules(Pageable pageable) {
         
@@ -56,9 +60,12 @@ public class CapsuleService {
         return repository.save(capsule);
     }
 
-    public Capsule addPublication(Capsule capsule, Publication publication)
-    {
-        capsule.getPublications().add(publication);
+    public Capsule addPublication(UUID capsuleId, UUID publicationId) {
+
+        Capsule capsule = this.getCapsuleById(capsuleId);
+        Publication publication = publicationService.getPublicationById(publicationId);
+
+        publication.setCapsule(capsule);
         return repository.save(capsule);
     }
 

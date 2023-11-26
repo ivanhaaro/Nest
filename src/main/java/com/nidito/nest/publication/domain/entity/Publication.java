@@ -3,6 +3,7 @@ package com.nidito.nest.publication.domain.entity;
 import java.util.Date;
 import java.util.UUID;
 
+import com.nidito.nest.capsule.domain.entity.Capsule;
 import com.nidito.nest.publication.domain.entity.dto.PublicationDto;
 import com.nidito.nest.user.domain.entity.User;
 
@@ -31,6 +32,10 @@ public abstract class Publication {
     @ManyToOne(optional = false)
     @JoinColumn(name = "owner_id")
     private User owner;
+
+    @ManyToOne
+    @JoinColumn(name = "capsule_id")
+    private Capsule capsule;
 
     public enum PublicationType {
         Note, Picture, Song
