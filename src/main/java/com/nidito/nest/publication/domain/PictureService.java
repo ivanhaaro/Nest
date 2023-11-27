@@ -25,7 +25,7 @@ public class PictureService {
     @Autowired
     private PublicationService publicationService;
 
-    public String createPicture(PictureDto pictureDto) {
+    public PictureDto createPicture(PictureDto pictureDto) {
 
         MultipartFile file = pictureDto.getImage();
         String fileName = file.getOriginalFilename() + "_" + ZonedDateTime.now();
@@ -37,9 +37,11 @@ public class PictureService {
         String fileUrl = s3Client.getUrl(bucketName, fileName).toString();
         Picture picture = new Picture(pictureDto);
         picture.setUrl(fileUrl);
-        publicationService.createPublication(picture, pictureDto.getOwnerId(), pictureDto.getWatchers());
+        var returnedPictureDto = (PictureDto) publicationService.createPublication(picture, pictureDto.getOwnerId(), pictureDto.getWatchers()).toDto();
+        returnedPictureDto.setUrl(fileUrl);
+        returnedPictureDto.setImage(file);
 
-        return "File uploaded " + fileName;
+        return returnedPictureDto;
     }
 
     private File convertMultipartFileToFile(MultipartFile file) {

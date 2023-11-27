@@ -101,7 +101,7 @@ public class PublicationController {
     
 
     @PostMapping("/picture")
-    public ResponseEntity<String> uploadImage(
+    public ResponseEntity<PictureDto> uploadImage(
             @RequestParam("image") MultipartFile image,
             @RequestParam("ownerId") UUID ownerId,
             @RequestParam("description") String description,
@@ -126,7 +126,7 @@ public class PublicationController {
         }
         catch(Exception e)
         {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Image upload failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
