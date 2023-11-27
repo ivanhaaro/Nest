@@ -118,11 +118,10 @@ public class PublicationController {
         pictureUploadDto.setOwnerId(ownerId);
         pictureUploadDto.setDescription(description);
         pictureUploadDto.setWatchers(watchersUUIDs);
-        pictureUploadDto.setImage(image);
         pictureUploadDto.setPubliType(PublicationType.Picture);
         try
         {
-            return ResponseEntity.ok(pictureService.createPicture(pictureUploadDto));
+            return ResponseEntity.ok(pictureService.createPicture(pictureUploadDto, image));
         }
         catch(Exception e)
         {

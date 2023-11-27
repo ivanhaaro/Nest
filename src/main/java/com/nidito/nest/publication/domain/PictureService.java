@@ -25,9 +25,8 @@ public class PictureService {
     @Autowired
     private PublicationService publicationService;
 
-    public PictureDto createPicture(PictureDto pictureDto) {
+    public PictureDto createPicture(PictureDto pictureDto, MultipartFile file) {
 
-        MultipartFile file = pictureDto.getImage();
         String fileName = file.getOriginalFilename() + "_" + ZonedDateTime.now();
         s3Client.putObject(bucketName, fileName, convertMultipartFileToFile(file));
 
@@ -39,7 +38,6 @@ public class PictureService {
         picture.setUrl(fileUrl);
         var returnedPictureDto = (PictureDto) publicationService.createPublication(picture, pictureDto.getOwnerId(), pictureDto.getWatchers()).toDto();
         returnedPictureDto.setUrl(fileUrl);
-        returnedPictureDto.setImage(file);
 
         return returnedPictureDto;
     }
