@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.nidito.nest.capsule.domain.entity.Capsule;
 import com.nidito.nest.publication.domain.entity.Publication;
 import com.nidito.nest.publication.infrastructure.PublicationRepository;
 import com.nidito.nest.user.domain.UserService;
@@ -46,18 +47,20 @@ public class PublicationService {
         else return publication.get();
     }
 
+    public List<Publication> getPublicationByCapsule(Capsule capsule) {
+
+       return repository.findByCapsule(capsule);
+    }
+
     public Publication createPublication(Publication publication, UUID ownerId, List<UUID> usersIds) {
 
         publication.setDate(Date.from(Instant.now()));
         publication.setOwner(userService.getUserById(ownerId));
         for(UUID id : usersIds) {
-            User u = userService.getUserById(id);
-            Set<Publication> feed = u.getFeed();
-            feed.add(publication); 
-            // userService
-            // .getUserById(id)
-            // .getFeed()
-            // .add(publication); 
+            userService
+            .getUserById(id)
+            .getFeed()
+            .add(publication); 
         }
         return repository.save(publication);
     }

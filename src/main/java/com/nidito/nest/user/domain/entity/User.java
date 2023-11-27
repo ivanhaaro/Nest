@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import com.nidito.nest.capsule.domain.entity.Capsule;
 import com.nidito.nest.diffusionList.domain.entity.DiffusionList;
 import com.nidito.nest.publication.domain.entity.Publication;
 
@@ -58,6 +59,14 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "id"))
     private Set<Publication> feed = new HashSet<>();
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+        name = "user_capsule",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "capsule_id", referencedColumnName = "id")
+    )
+    private Set<Capsule> capsules;
 
     public User(UserDto userDto) {
 
