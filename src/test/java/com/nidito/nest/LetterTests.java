@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Date;
@@ -19,6 +20,7 @@ import com.nidito.nest.letter.domain.entity.LetterDto;
 import com.nidito.nest.user.domain.entity.User;
 import com.nidito.nest.user.infrastructure.UserRepository;
 
+import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,8 +44,8 @@ public class LetterTests {
     void creatingNote() throws Exception {
         
         LetterDto letter = new LetterDto();
-        letter.setTitle("title");
-        letter.setText("text");
+        letter.setTitle("MyTitle");
+        letter.setText("MyText");
         letter.setOpened(false);
         letter.setDate(new Date());
 
@@ -54,7 +56,10 @@ public class LetterTests {
 
         ResponseEntity<LetterDto> res = controller.createLetter(letter);
 
-        mvc.perform(get("/letter/" + res.getBody().getId())).andExpect(status().isOk());
+        mvc.perform(get("/letter/" + res.getBody().getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", is("MyTitle")))
+                .andExpect(jsonPath("$.text", is("MyText")));
     }
 
     private User getDefaultUser() {
