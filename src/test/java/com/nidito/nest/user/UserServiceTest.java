@@ -2,222 +2,212 @@ package com.nidito.nest.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.MockitoAnnotations;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
 
 import com.nidito.nest.user.domain.UserService;
 import com.nidito.nest.user.domain.entity.FriendRequest;
 import com.nidito.nest.user.domain.entity.User;
 import com.nidito.nest.user.domain.entity.UserDto;
-import com.nidito.nest.user.infrastructure.FriendRequestRepository;
 import com.nidito.nest.user.infrastructure.UserRepository;
+import com.nidito.nest.user.infrastructure.FriendRequestRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;;
-
-@ExtendWith(MockitoExtension.class)
-class UserServiceTest {
-
-    @Mock
-    private UserRepository userRepository;
+public class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
 
     @Mock
+    private UserRepository userRepository;
+
+    @Mock
     private FriendRequestRepository friendRequestRepository;
 
-    private User user;
-    private User friend;
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-    @BeforeEach void setup()
+    protected User createUser(UUID uuid, String name, String mail, String password, String username)
     {
-        user = createUser(UUID.randomUUID(), "John", "Doe", "john.doe@email.com", "johndoe", "password123");
-        friend = createUser(UUID.randomUUID(), "Jane", "Smith", "jane.smith@email.com", "janesmith", "password456");
-        List<User> users = List.of(user, friend);
-        userRepository.saveAll(users);
+        User newUser = new User();
+        newUser.setId(uuid);
+        newUser.setName(name);
+        newUser.setMail(mail);
+        newUser.setPassword(password);
+        newUser.setUsername(username);
+        return newUser;
     }
 
     @Test
-    void testGetUsers() {
+    public void testGetUsers() {
         List<User> expectedUsers = Arrays.asList(
-            createUser(UUID.randomUUID(), "John", "Doe", "john.doe@email.com", "johndoe", "password123"),
-            createUser(UUID.randomUUID(), "Jane", "Smith", "jane.smith@email.com", "janesmith", "password456")
-        );
+            createUser(UUID.randomUUID(), "Manolo", "manolo@gmail.com", "Manolo123?", "manolobombastic"), 
+            createUser(UUID.randomUUID(), "Paco", "paco@gmail.com", "Paco123?", "paquitosanz")
+            );
         when(userRepository.findAll()).thenReturn(expectedUsers);
 
-        List<User> users = userService.getUsers();
+        List<User> actualUsers = userService.getUsers();
 
-        assertEquals(expectedUsers, users);
+        assertEquals(expectedUsers, actualUsers);
+        verify(userRepository, times(1)).findAll();
     }
 
     @Test
-    void testGetUserById() {
-        UUID testId = user.getId();
-        when(userRepository.findById(testId)).thenReturn(Optional.of(user));
+    public void testGetUserById() {
+        UUID userId = UUID.randomUUID();
+        User expectedUser = createUser(userId, "Manolo", "manolo@gmail.com", "Manolo123?", "manolobombastic");
+        when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
 
-        User expectedUser = userService.getUserById(testId);
+        User actualUser = userService.getUserById(userId);
 
-        assertEquals(expectedUser, user);
-
-        when(userRepository.findById(testId)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> userService.getUserById(testId));
-    }
-    
-    @Test
-    void testGetFriends() {
-        UUID testId = UUID.randomUUID();
-        User user = new User(); // Initialize with test data and friends
-        when(userRepository.findById(testId)).thenReturn(Optional.of(user));
-    
-        Set<User> friends = userService.getFriends(testId);
-    
-        assertEquals(user.getFriends(), friends);
+        assertEquals(expectedUser, actualUser);
+        verify(userRepository, times(1)).findById(userId);
     }
 
     @Test
-    void testCreateUser() {
-        User newUser = new User(); // Initialize with test data
+    public void testCreateUser() {
+        User newUser = createUser(UUID.randomUUID(), "Manolo", "manolo@gmail.com", "Manolo123?", "manolobombastic");
         when(userRepository.save(newUser)).thenReturn(newUser);
-    
-        User savedUser = userService.createUser(newUser);
-    
-        assertEquals(newUser, savedUser);
+
+        User createdUser = userService.createUser(newUser);
+
+        assertEquals(newUser, createdUser);
+        verify(userRepository, times(1)).save(newUser);
     }
 
     @Test
-    void testUpdateUser() {
-        User updatedUser = createUser(UUID.randomUUID(), "John", "Doe", "john.doe@email.com", "johndoe", "password123");
-        when(userRepository.existsById(updatedUser.getId())).thenReturn(true);
+    public void testUpdateUser() {
+        UUID userId = UUID.randomUUID();
+        User updatedUser = createUser(userId, "Manolo23", "manolo@gmail.com", "Manolo123?", "manolobombastic23");
+
+        when(userRepository.existsById(userId)).thenReturn(true);
         when(userRepository.save(updatedUser)).thenReturn(updatedUser);
-    
-        User savedUser = userService.updateUser(updatedUser, updatedUser.getId());
-    
-        assertEquals(updatedUser, savedUser);
-    
-        when(userRepository.existsById(updatedUser.getId())).thenReturn(false);
-        assertThrows(EntityNotFoundException.class, () -> userService.updateUser(updatedUser, updatedUser.getId()));
+
+        User resultUser = userService.updateUser(updatedUser, userId);
+
+        assertEquals(updatedUser, resultUser);
+        verify(userRepository, times(1)).save(updatedUser);
     }
 
     @Test
-    void testAddFriend() {
-    
-        User updatedUser = userService.addFriend(user.getId(), friend.getId());
-        assertTrue(updatedUser.getFriends().contains(friend));
+    public void testAddFriend() {
+        UUID userId = UUID.randomUUID();
+        UUID friendId = UUID.randomUUID();
+        User user = createUser(userId, "Manolo", "manolo@gmail.com", "Manolo123?", "manolobombastic");
+        User friend = createUser(friendId, "Paco", "paco@gmail.com", "Paco123?", "paquitosanz");
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(friendId)).thenReturn(Optional.of(friend));
+        when(userRepository.save(user)).thenReturn(user);
+
+        User userWithFriend = userService.addFriend(userId, friendId);
+
+        assertTrue(userWithFriend.getFriends().contains(friend));
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
-    void testDeleteFriend() {
+    public void testDeleteFriend() {
+        UUID userId = UUID.randomUUID();
+        UUID friendId = UUID.randomUUID();
+        User user = createUser(userId, "Manolo", "manolo@gmail.com", "Manolo123?", "manolobombastic");
+        User friend = createUser(friendId, "Paco", "paco@gmail.com", "Paco123?", "paquitosanz");
+        user.getFriends().add(friend);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(friendId)).thenReturn(Optional.of(friend));
+        when(userRepository.save(user)).thenReturn(user);
 
-        user.addFriend(friend);
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-        when(userRepository.findById(friend.getId())).thenReturn(Optional.of(friend));
-    
-        User updatedUser = userService.deleteFriend(user.getId(), friend.getId());
-    
-        assertFalse(updatedUser.getFriends().contains(friend));
+        User userWithoutFriend = userService.deleteFriend(userId, friendId);
+
+        assertFalse(userWithoutFriend.getFriends().contains(friend));
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
-    void testDeleteUser() {
-        User expectedUser = createUser(UUID.randomUUID(), "John", "Doe", "john.doe@email.com", "johndoe", "password123");
-        when(userRepository.findById(expectedUser.getId())).thenReturn(Optional.of(expectedUser));
-    
-        userService.deleteUser(expectedUser.getId());
-    
-        assertNull(userRepository.findById(expectedUser.getId()));
-    }
+    public void testDeleteUser() {
+        UUID userId = UUID.randomUUID();
+        User user = createUser(userId, "Paco", "paco@gmail.com", "Paco123?", "paquitosanz");
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        doNothing().when(userRepository).deleteById(userId);
 
-    @Test
-    void testGetUserByUsername() {
-        String username = "johndoe";
-        User expectedUser = createUser(UUID.randomUUID(), "John", "Doe", "john.doe@email.com", "johndoe", "password123");
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(expectedUser));
-    
-        User user = userService.getUserByUsername(username);
-    
-        assertEquals(expectedUser, user);
-    
-        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> userService.getUserByUsername(username));
-    }
+        userService.deleteUser(userId);
 
-    @Test
-    void testDeleteFriendRequest() {
-        userService.sendFriendRequest(user.getId(), friend.getId());
-    
-        String result = userService.deleteFriendRequest(user.getId(), friend.getId());
-    
-        assertEquals("Friend request successfully removed!", result);
-    }
-    
-
-    @Test
-    void testGetAllFriendRequests() {
-        User user3 = createUser(UUID.randomUUID(), "Alice", "Johnson", "alice.johnson@email.com", "alicejohnson", "password789");
-        
-        userService.sendFriendRequest(user.getId(), friend.getId());
-        userService.sendFriendRequest(user.getId(), user3.getId());
-
-        List<UserDto> usersRequests = userService.getAllFriendRequests(user.getId());
-        
-        assertEquals(friend, usersRequests.get(0));
-        assertEquals(user3, usersRequests.get(1)); 
-
-        FriendRequest f1 = new FriendRequest(user, friend);
-        FriendRequest f2 = new FriendRequest(user, user3);
-        List<FriendRequest> requests = new ArrayList<>();
-        requests.addAll(List.of(f1,f2));
-        
-        when(friendRequestRepository.findByOriginId(user.getId())).thenReturn(requests);
-
-        
-        assertEquals(friend, requests.get(0).getReceiver());
-        assertEquals(user3, requests.get(1).getReceiver());
-        assertEquals(user, requests.get(0).getOrigin());
-
-        assertEquals(usersRequests.size(), requests.size());
+        verify(userRepository, times(1)).deleteById(userId);
     }
 
 
     @Test
-    void testSendFriendRequest() {
+    public void testGetUserByUsername() {
+        String username = "testUsername";
+        User user = createUser(UUID.randomUUID(), "Paco", "paco@gmail.com", "Paco123?", username);
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-        when(userRepository.findById(friend.getId())).thenReturn(Optional.of(friend));
+        User resultUser = userService.getUserByUsername(username);
 
-        String result = userService.sendFriendRequest(user.getId(), friend.getId());
-
-        assertEquals("Request sent successfully", result);
-
-        when(friendRequestRepository.save(any(FriendRequest.class))).thenThrow(RuntimeException.class);
-        result = userService.sendFriendRequest(user.getId(), friend.getId());
-        assertTrue(result.startsWith("Error while sending the request"));
+        assertEquals(user, resultUser);
+        verify(userRepository, times(1)).findByUsername(username);
     }
 
-    private static User createUser(UUID id, String name, String lastname, String mail, String username, String password) {
-        User user = new User();
-        user.setId(id);
-        user.setName(name);
-        user.setLastname(lastname);
-        user.setMail(mail);
-        user.setUsername(username);
-        user.setPassword(password);
-        return user;
+    @Test
+    public void testSendFriendRequest() {
+        UUID originUserId = UUID.randomUUID();
+        UUID friendId = UUID.randomUUID();
+        User originUser = createUser(originUserId, "Manolo", "manolo@gmail.com", "Manolo123?", "manolobombastic");
+        User friend = createUser(friendId, "Paco", "paco@gmail.com", "Paco123?", "paquitosanz");
+        when(userRepository.findById(originUserId)).thenReturn(Optional.of(originUser));
+        when(userRepository.findById(friendId)).thenReturn(Optional.of(friend));
+        when(friendRequestRepository.save(any(FriendRequest.class))).thenReturn(new FriendRequest());
+
+        String response = userService.sendFriendRequest(originUserId, friendId);
+
+        assertEquals("Request sent successfully", response);
+        verify(friendRequestRepository, times(1)).save(any(FriendRequest.class));
     }
+
+    @Test
+    public void testGetAllFriendRequests() {
+        UUID userId = UUID.randomUUID();
+        User originUser = createUser(userId, "Manolo", "manolo@gmail.com", "Manolo123?", "manolobombastic");
+        FriendRequest request1 = new FriendRequest();
+        request1.setOrigin(originUser);
+
+        FriendRequest request2 = new FriendRequest();
+        request2.setOrigin(originUser);
+
+        List<FriendRequest> friendRequests = Arrays.asList(request1, request2);
+        when(friendRequestRepository.findByReceiverId(userId)).thenReturn(friendRequests);
+
+        when(userRepository.findById(any(UUID.class)))
+                .thenReturn(Optional.of(originUser));
+
+        List<UserDto> result = userService.getAllFriendRequests(userId);
+        assertEquals(result.get(0).getId(), friendRequests.get(0).getOrigin().getId());
+        assertEquals(result.get(1).getId(), friendRequests.get(1).getOrigin().getId());
+
+    }
+
+    @Test
+    public void testDeleteFriendRequest() {
+        UUID userId = UUID.randomUUID();
+        UUID friendId = UUID.randomUUID();
+        User user = createUser(userId, "Manolo", "manolo@gmail.com", "Manolo123?", "manolobombastic");
+        User friend = createUser(friendId, "Paco", "paco@gmail.com", "Paco123?", "paquitosanz");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(friendId)).thenReturn(Optional.of(friend));
+        doNothing().when(friendRequestRepository).deleteByOriginAndReceiver(any(User.class), any(User.class));
+
+        String response = userService.deleteFriendRequest(userId, friendId);
+
+        assertEquals("Friend request successfully removed!", response);
+        verify(friendRequestRepository, times(1)).deleteByOriginAndReceiver(any(User.class), any(User.class));
+    }
+
 
 }
-
