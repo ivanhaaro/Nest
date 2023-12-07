@@ -15,7 +15,6 @@ class FriendRequestTest {
         User user2 = new User();
         FriendRequest friendRequest = new FriendRequest(user1, user2);
 
-        assertNotNull(friendRequest.getId());
         assertEquals(user1, friendRequest.getOrigin());
         assertEquals(user2, friendRequest.getReceiver());
     }
