@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,6 +69,22 @@ public class LetterController {
     public ResponseEntity<LetterDto> openLetter(@PathVariable UUID id) {
 
         LetterDto res = new LetterDto(letterService.openLetter(id));
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PutMapping("/favourite/{id}")
+    @JsonView(Views.Retrieve.class)
+    public ResponseEntity<LetterDto> addToFavourite(@PathVariable UUID id) {
+
+        LetterDto res = new LetterDto(letterService.addFavouriteLetter(id));
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/favourite/{id}")
+    @JsonView(Views.Retrieve.class)
+    public ResponseEntity<LetterDto> deleteFromFavourite(@PathVariable UUID id) {
+
+        LetterDto res = new LetterDto(letterService.deleteFavouriteLetter(id));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

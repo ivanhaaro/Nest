@@ -31,6 +31,9 @@ public class LetterDto {
     @JsonView({Views.Retrieve.class, Views.Create.class})
     private UUID receiverUserId;
 
+    @JsonView(Views.Retrieve.class)
+    private UUID favUserId;
+
     @JsonView({Views.Retrieve.class})
     private boolean opened;
 
@@ -43,5 +46,6 @@ public class LetterDto {
         this.opened = letter.isOpened();
         this.originUserId = letter.getOrigin().getId();
         this.receiverUserId = letter.getReceiver().getId();
+        this.favUserId = letter.getFavUser() != null ? letter.getFavUser().getId() : null;
     }
 }

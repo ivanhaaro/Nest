@@ -51,5 +51,19 @@ public class LetterService {
         letter.setOpened(true);
         return letterRepository.save(letter);
     }
+
+    public Letter addFavouriteLetter(UUID id) {
+
+        Letter letter = this.getLetterById(id);
+        letter.setFavUser(letter.getReceiver());
+        return letterRepository.save(letter);
+    }
+
+    public Letter deleteFavouriteLetter(UUID id) {
+
+        Letter letter = this.getLetterById(id);
+        letter.setFavUser(null);
+        return letterRepository.save(letter);
+    }
     
 }

@@ -30,6 +30,12 @@ public class UserDto {
     @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
     private String password;
 
+    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
+    private String state;
+
+    @JsonView({Views.Retrieve.class, Views.Create.class, Views.Update.class})
+    private String avatar;
+
     public UserDto(User user) {
 
         this.id = user.getId();
@@ -38,5 +44,7 @@ public class UserDto {
         this.mail = user.getMail();
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.state = user.getState();
+        this.avatar = user.getAvatar();
     }
 }

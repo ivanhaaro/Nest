@@ -39,6 +39,8 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
+    private String state;
+    private String avatar;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Set<Publication> publications = new HashSet<>();
@@ -76,6 +78,8 @@ public class User {
         this.mail = userDto.getMail();
         this.username = userDto.getUsername();
         this.password = userDto.getPassword();
+        this.state = userDto.getState();
+        this.avatar = userDto.getAvatar();
     }
 
     @Override

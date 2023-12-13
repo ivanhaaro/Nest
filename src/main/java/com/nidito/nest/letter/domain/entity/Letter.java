@@ -37,6 +37,10 @@ public class Letter {
     @JoinColumn(name = "receiver_user_id")
     private User receiver;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "favourite_user_id")
+    private User favUser;
+
     public Letter(LetterDto letterDto) {
 
         this.id = letterDto.getId();
