@@ -52,9 +52,17 @@ public class UserService {
 
     public User updateUser(User user, UUID id) {
         
-        if(!isValidUser(id)) throw new EntityNotFoundException("User not found with id " + id); 
-        user.setId(id);
-        return userRepository.save(user);
+        User toUpdate = this.getUserById(id);
+
+        toUpdate.setName(user.getName());
+        toUpdate.setLastname(user.getLastname());
+        toUpdate.setMail(user.getMail());
+        toUpdate.setUsername(user.getUsername());
+        toUpdate.setPassword(user.getPassword());
+        toUpdate.setState(user.getState());
+        toUpdate.setAvatar(user.getAvatar());
+
+        return userRepository.save(toUpdate);
     }
 
     @Transactional
